@@ -15,6 +15,8 @@ public class PokemonService {
 
     public PokemonResponse getPokemonName(String pokemonName) {
 
+        pokemonName = pokemonName.toLowerCase();
+
         String description = curateDescription(pokeProvider.getPokemonDescription(pokemonName));
 
         return new PokemonResponse(pokemonName, description);
