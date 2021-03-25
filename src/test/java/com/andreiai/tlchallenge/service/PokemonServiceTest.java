@@ -51,7 +51,7 @@ class PokemonServiceTest {
     @Test
     @DisplayName("Get pokemon description. PokeAPI failure. Not Found")
     public void checkPokemonGetsDescription_NotFound() {
-        when(pokeProvider.getPokemonDescription(POKEMON_NAME)).thenThrow(new PokemonNotFoundException("Test"));
+        when(pokeProvider.getPokemonDescription(POKEMON_NAME)).thenThrow(new PokemonNotFoundException("Test", new Exception()));
 
         try {
             pokemonService.getPokemonName(POKEMON_NAME);
@@ -62,7 +62,7 @@ class PokemonServiceTest {
     @Test
     @DisplayName("Get pokemon description. Poke API failure. Service Unavailable")
     public void checkPokemonGetsDescription_PokeAPIFailure_ServiceUnavailable() {
-        when(pokeProvider.getPokemonDescription(POKEMON_NAME)).thenThrow(new PokeProviderException("Test"));
+        when(pokeProvider.getPokemonDescription(POKEMON_NAME)).thenThrow(new PokeProviderException("Test", new Exception()));
 
         try {
             pokemonService.getPokemonName(POKEMON_NAME);
@@ -74,7 +74,7 @@ class PokemonServiceTest {
     @DisplayName("Get pokemon description. Shakespeare API failure. Service Unavailable")
     public void checkPokemonGetsDescription_ShakespeareFailure_ServiceUnavailable() {
         when(pokeProvider.getPokemonDescription(POKEMON_NAME)).thenReturn("Quite\nshocking");
-        when(shakespeareProvider.getShakespeareDescription(anyString())).thenThrow(new ShakespeareProviderException("Test"));
+        when(shakespeareProvider.getShakespeareDescription(anyString())).thenThrow(new ShakespeareProviderException("Test", new Exception()));
 
         try {
             pokemonService.getPokemonName(POKEMON_NAME);

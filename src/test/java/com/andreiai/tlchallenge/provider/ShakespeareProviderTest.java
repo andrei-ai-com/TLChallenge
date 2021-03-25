@@ -1,8 +1,6 @@
 package com.andreiai.tlchallenge.provider;
 
-import com.andreiai.tlchallenge.domain.exception.PokeProviderException;
-import com.andreiai.tlchallenge.domain.exception.PokemonNotFoundException;
-import com.andreiai.tlchallenge.domain.exception.ShakespeareProviderException;
+import com.andreiai.tlchallenge.domain.exception.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -30,7 +28,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 class ShakespeareProviderTest {
 
     private static final String SHAKESPEARE_LOCATION = "https://api.funtranslations.com/translate/";
-    private static final String SHAKESPEARE_SPEECH_PATH = "shakespeare";
+    private static final String SHAKESPEARE_SPEECH_PATH = "shakespeare.json";
 
     private static final String EXAMPLE_TEXT = "original";
 
@@ -55,7 +53,6 @@ class ShakespeareProviderTest {
     public void checkShakespeareAPI_ok(String text) {
 
         URI uri = UriComponentsBuilder.fromHttpUrl(SHAKESPEARE_LOCATION + SHAKESPEARE_SPEECH_PATH)
-                .queryParam("text", text)
                 .build()
                 .toUri();
 
@@ -80,7 +77,6 @@ class ShakespeareProviderTest {
     public void checkShakespeareAPI_serverError(String text) {
 
         URI uri = UriComponentsBuilder.fromHttpUrl(SHAKESPEARE_LOCATION + SHAKESPEARE_SPEECH_PATH)
-                .queryParam("text", text)
                 .build()
                 .toUri();
 
@@ -94,6 +90,27 @@ class ShakespeareProviderTest {
         } catch (ShakespeareProviderException e) {
             assertEquals("The ShakespeareAPI is currently unavailable", e.getMessage());
         }
+
+        mockServer.verify();
+    }
+
+    @DisplayName("Check Shakespeare Speech, Bad Request error")
+    @ParameterizedTest(name = "Getting Shakespeare speech for {0}")
+    @ValueSource(strings = { EXAMPLE_TEXT })
+    public void checkShakespeareAPI_badRequest(String text) {
+
+        URI uri = UriComponentsBuilder.fromHttpUrl(SHAKESPEARE_LOCATION + SHAKESPEARE_SPEECH_PATH)
+                .build()
+                .toUri();
+
+        mockServer.expect(ExpectedCount.once(), requestTo(uri))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withBadRequest());
+
+        try {
+            shakespeareProvider.getShakespeareDescription(text);
+            fail();
+        } catch (BadRequestException ignored) {}
 
         mockServer.verify();
     }
