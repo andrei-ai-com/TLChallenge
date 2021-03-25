@@ -72,11 +72,11 @@ class PokeProviderTest {
 
         String pokemonDescription = pokeProvider.getPokemonDescription(pokemonName);
 
-        assertEquals(pokemonDescription, "Spits fire that\n" +
+        assertEquals("Spits fire that\n" +
                 "is hot enough to\n" +
                 "melt boulders.\fKnown to cause\n" +
                 "forest fires\n" +
-                "unintentionally.");
+                "unintentionally.", pokemonDescription);
 
         mockServer.verify();
     }
@@ -98,7 +98,7 @@ class PokeProviderTest {
             pokeProvider.getPokemonDescription(pokemonName);
             fail();
         } catch (PokemonNotFoundException e) {
-            assertEquals(e.getMessage(), String.format("We could not find any pokemon with the name %s", pokemonName.toLowerCase()));
+            assertEquals(String.format("We could not find any pokemon with the name %s", pokemonName.toLowerCase()), e.getMessage());
         }
 
         mockServer.verify();
@@ -121,7 +121,7 @@ class PokeProviderTest {
             pokeProvider.getPokemonDescription(pokemonName);
             fail();
         } catch (PokeProviderException e) {
-            assertEquals(e.getMessage(), "The PokeAPI is currently unavailable");
+            assertEquals("The PokeAPI is currently unavailable", e.getMessage());
         }
 
         mockServer.verify();

@@ -44,8 +44,8 @@ class PokemonServiceTest {
 
         PokemonResponse pokemonResponse = pokemonService.getPokemonName(POKEMON_NAME);
 
-        assertEquals(pokemonResponse.getName(), "pikachu");
-        assertEquals(pokemonResponse.getDescription(), "Quite shocking");
+        assertEquals("pikachu", pokemonResponse.getName());
+        assertEquals("Quite shocking", pokemonResponse.getDescription());
     }
 
     @Test
