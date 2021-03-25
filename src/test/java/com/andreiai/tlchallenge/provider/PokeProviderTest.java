@@ -1,5 +1,6 @@
 package com.andreiai.tlchallenge.provider;
 
+import com.andreiai.tlchallenge.domain.exception.PokeProviderException;
 import com.andreiai.tlchallenge.domain.exception.PokemonNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -53,7 +54,7 @@ class PokeProviderTest {
     @DisplayName("Get pokemon description. Ok")
     @ParameterizedTest(name = "Getting description for {0}")
     @ValueSource(strings = { POKEMON_NAME })
-    public void checkPokeAPI_ok(String pokemonName) throws Exception {
+    public void checkPokeAPI_ok(String pokemonName) {
 
         URI uri = UriComponentsBuilder.fromHttpUrl(POKEAPI_LOCATION + String.format(POKEMON_SPECIES_PATH, pokemonName))
                 .build()
@@ -83,7 +84,7 @@ class PokeProviderTest {
     @DisplayName("Get pokemon description. Not Found")
     @ParameterizedTest(name = "Getting description for {0}")
     @ValueSource(strings = { POKEMON_NAME_NOT_FOUND })
-    public void checkPokeAPI_not_found(String pokemonName) throws Exception {
+    public void checkPokeAPI_not_found(String pokemonName) {
 
         URI uri = UriComponentsBuilder.fromHttpUrl(POKEAPI_LOCATION + String.format(POKEMON_SPECIES_PATH, pokemonName))
                 .build()
@@ -96,7 +97,32 @@ class PokeProviderTest {
         try {
             pokeProvider.getPokemonDescription(pokemonName);
             fail();
-        } catch (PokemonNotFoundException ignored) {}
+        } catch (PokemonNotFoundException e) {
+            assertEquals(e.getMessage(), String.format("We could not find any pokemon with the name %s", pokemonName.toLowerCase()));
+        }
+
+        mockServer.verify();
+    }
+
+    @DisplayName("Get pokemon description. Server Error")
+    @ParameterizedTest(name = "Getting description for {0}")
+    @ValueSource(strings = { POKEMON_NAME_NOT_FOUND })
+    public void checkPokeAPI_serverError(String pokemonName) {
+
+        URI uri = UriComponentsBuilder.fromHttpUrl(POKEAPI_LOCATION + String.format(POKEMON_SPECIES_PATH, pokemonName))
+                .build()
+                .toUri();
+
+        mockServer.expect(ExpectedCount.once(), requestTo(uri))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
+
+        try {
+            pokeProvider.getPokemonDescription(pokemonName);
+            fail();
+        } catch (PokeProviderException e) {
+            assertEquals(e.getMessage(), "The PokeAPI is currently unavailable");
+        }
 
         mockServer.verify();
     }
