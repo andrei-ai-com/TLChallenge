@@ -76,4 +76,4 @@ fabric.properties
 /.idea/vcs.xml
 /.idea/workspace.xml
 /TLChallenge.iml
-/target/classes/
+/target
