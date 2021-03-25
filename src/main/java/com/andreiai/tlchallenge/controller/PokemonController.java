@@ -38,16 +38,21 @@ public class PokemonController {
             @ApiResponse(code = 503, message = "Service Unavailable")
     })
     public ResponseEntity getHealthcheck(@PathVariable String pokemonName) {
+
+        if (pokemonName == null || pokemonName.isBlank()) {
+            return new ResponseEntity<>("Please provide us with a Pokemon name", HttpStatus.BAD_REQUEST);
+        }
+
         try {
             return new ResponseEntity<>(pokemonService.getPokemonName(pokemonName), HttpStatus.OK);
         } catch (BadRequestException e) {
-            logger.error("Bad request", e);
+            logger.info("Bad request", e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (PokemonNotFoundException e) {
-            logger.error("Could not get pokemon", e);
+            logger.info("Pokemon not found", e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (ServiceUnavailableException e) {
-            logger.error("One of the third parties is unavailable", e);
+            logger.warn("One of the third parties is unavailable", e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
         } catch (Exception e) {
             logger.error("Internal server error", e);
