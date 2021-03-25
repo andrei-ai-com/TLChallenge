@@ -32,7 +32,7 @@ class ShakespeareProviderTest {
     private static final String SHAKESPEARE_LOCATION = "https://api.funtranslations.com/translate/";
     private static final String SHAKESPEARE_SPEECH_PATH = "shakespeare";
 
-    private static final String EXAMPLE_TEXT = "You gave Mr. Tim a hearty meal, but unfortunately what he ate made him die.";
+    private static final String EXAMPLE_TEXT = "original";
 
     @Autowired
     private ShakespeareProvider shakespeareProvider;
@@ -52,10 +52,10 @@ class ShakespeareProviderTest {
     @DisplayName("Check Shakespeare Speech")
     @ParameterizedTest(name = "Getting Shakespeare speech for {0}")
     @ValueSource(strings = { EXAMPLE_TEXT })
-    public void checkPokeAPI_ok(String text) {
+    public void checkShakespeareAPI_ok(String text) {
 
         URI uri = UriComponentsBuilder.fromHttpUrl(SHAKESPEARE_LOCATION + SHAKESPEARE_SPEECH_PATH)
-                .queryParam(text)
+                .queryParam("text", text)
                 .build()
                 .toUri();
 
@@ -69,7 +69,7 @@ class ShakespeareProviderTest {
 
         String shakespeareSpeech = shakespeareProvider.getShakespeareDescription(text);
 
-        assertEquals("Thee did giveth mr. Tim a hearty meal,  but unfortunately what he did doth englut did maketh him kicketh the bucket.", shakespeareSpeech);
+        assertEquals("translated", shakespeareSpeech);
 
         mockServer.verify();
     }
@@ -77,10 +77,10 @@ class ShakespeareProviderTest {
     @DisplayName("Check Shakespeare Speech, API error")
     @ParameterizedTest(name = "Getting Shakespeare speech for {0}")
     @ValueSource(strings = { EXAMPLE_TEXT })
-    public void checkPokeAPI_not_found(String text) {
+    public void checkShakespeareAPI_serverError(String text) {
 
         URI uri = UriComponentsBuilder.fromHttpUrl(SHAKESPEARE_LOCATION + SHAKESPEARE_SPEECH_PATH)
-                .queryParam(text)
+                .queryParam("text", text)
                 .build()
                 .toUri();
 
