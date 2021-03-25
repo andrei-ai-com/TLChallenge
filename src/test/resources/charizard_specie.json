@@ -1,0 +1,26 @@
+{
+    "flavor_text_entries": [
+        {
+            "flavor_text": "Spits fire that\nis hot enough to\nmelt boulders.\fKnown to cause\nforest fires\nunintentionally.",
+            "language": {
+                "name": "en",
+                "url": "https://pokeapi.co/api/v2/language/9/"
+            },
+            "version": {
+                "name": "red",
+                "url": "https://pokeapi.co/api/v2/version/1/"
+            }
+        },
+        {
+            "flavor_text": "くちから　しゃくねつの　ほのおを\nはきだすとき　しっぽの　さきは\nより　あかく　はげしく　もえあがる。",
+            "language": {
+                "name": "ja-Hrkt",
+                "url": "https://pokeapi.co/api/v2/language/1/"
+            },
+            "version": {
+                "name": "x",
+                "url": "https://pokeapi.co/api/v2/version/23/"
+            }
+        }
+    ]
+}
