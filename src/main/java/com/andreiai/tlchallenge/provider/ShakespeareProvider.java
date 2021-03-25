@@ -3,6 +3,9 @@ package com.andreiai.tlchallenge.provider;
 import com.andreiai.tlchallenge.domain.ShakespeareResponse;
 import com.andreiai.tlchallenge.domain.exception.ShakespeareBadRequestException;
 import com.andreiai.tlchallenge.domain.exception.ShakespeareProviderException;
+import com.andreiai.tlchallenge.service.PokemonService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -19,6 +22,8 @@ import java.util.Objects;
 
 @Service
 public class ShakespeareProvider {
+
+    private static final Logger logger = LoggerFactory.getLogger(ShakespeareProvider.class);
 
     private static final String location = "https://api.funtranslations.com/translate/";
     private static final String SHAKESPEARE_PATH = "shakespeare.json";
@@ -42,11 +47,15 @@ public class ShakespeareProvider {
 
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(urlData, headers);
 
+        logger.info("Calling Shakespeare API: {} - {}", url, description);
+
         try {
             return Objects.requireNonNull(restTemplate.exchange(url,
                     HttpMethod.POST,
                     entity,
                     ShakespeareResponse.class).getBody()).getContents().getTranslated();
+        } catch (HttpClientErrorException.TooManyRequests e) {
+            throw new ShakespeareBadRequestException(String.format("%s --> Here is a list of cached Shakespeare pokemons %s", e.getMessage(), PokemonService.cachedShakespeare), e);
         } catch (HttpClientErrorException e) {
             throw new ShakespeareBadRequestException(e.getMessage(), e);
         } catch (HttpServerErrorException e) {
