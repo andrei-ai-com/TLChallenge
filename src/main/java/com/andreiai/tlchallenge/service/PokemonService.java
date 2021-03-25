@@ -5,8 +5,13 @@ import com.andreiai.tlchallenge.provider.PokeProvider;
 import com.andreiai.tlchallenge.provider.ShakespeareProvider;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class PokemonService {
+
+    public static final Map<String, String> cachedShakespeare = new HashMap<>();
 
     private final PokeProvider pokeProvider;
     private final ShakespeareProvider shakespeareProvider;
@@ -21,7 +26,12 @@ public class PokemonService {
         pokemonName = pokemonName.toLowerCase();
 
         String description = curateDescription(pokeProvider.getPokemonDescription(pokemonName));
-        String shakespeareDescription = shakespeareProvider.getShakespeareDescription(description);
+
+        if (cachedShakespeare.get(pokemonName) == null) {
+            cachedShakespeare.put(pokemonName, shakespeareProvider.getShakespeareDescription(description));
+        }
+
+        String shakespeareDescription = cachedShakespeare.get(pokemonName);
 
         return new PokemonResponse(pokemonName, shakespeareDescription);
     }
