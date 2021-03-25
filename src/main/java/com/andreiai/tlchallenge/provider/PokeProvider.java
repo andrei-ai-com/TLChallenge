@@ -35,12 +35,12 @@ public class PokeProvider {
             )).getTextEntries().stream()
                     .filter(flavourTextEntry -> flavourTextEntry.getLanguage().getName().equals("en"))
                     .findFirst()
-                    .orElseThrow(() -> new PokemonNotFoundException(String.format("We could not find any pokemon with the name %s", pokemonName)))
+                    .orElseThrow(() -> new PokemonNotFoundException(String.format("We could not find any pokemon with the name %s", pokemonName), new Exception()))
                     .getText();
         } catch (HttpClientErrorException e) {
-            throw new PokemonNotFoundException(String.format("We could not find any pokemon with the name %s", pokemonName));
+            throw new PokemonNotFoundException(String.format("We could not find any pokemon with the name %s", pokemonName), e);
         } catch (HttpServerErrorException e) {
-            throw new PokeProviderException("The PokeAPI is currently unavailable");
+            throw new PokeProviderException("The PokeAPI is currently unavailable", e);
         }
     }
 }
