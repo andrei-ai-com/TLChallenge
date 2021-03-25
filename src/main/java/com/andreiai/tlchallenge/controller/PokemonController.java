@@ -2,6 +2,7 @@ package com.andreiai.tlchallenge.controller;
 
 import com.andreiai.tlchallenge.domain.PokemonResponse;
 import com.andreiai.tlchallenge.domain.exception.PokemonNotFoundException;
+import com.andreiai.tlchallenge.domain.exception.ServiceUnavailableException;
 import com.andreiai.tlchallenge.service.PokemonService;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -34,6 +35,8 @@ public class PokemonController {
             return new ResponseEntity<>(pokemonService.getPokemonName(pokemonName), HttpStatus.OK);
         } catch (PokemonNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (ServiceUnavailableException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

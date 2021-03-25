@@ -1,7 +1,7 @@
 package com.andreiai.tlchallenge.provider;
 
-import com.andreiai.tlchallenge.domain.Pokemon;
 import com.andreiai.tlchallenge.domain.PokemonSpecie;
+import com.andreiai.tlchallenge.domain.exception.PokeProviderException;
 import com.andreiai.tlchallenge.domain.exception.PokemonNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -15,7 +15,6 @@ import java.util.Objects;
 public class PokeProvider {
 
     private static final String location = "https://pokeapi.co/api/v2/";
-    private static final String POKEMON_PATH = "pokemon/%s";
     private static final String POKEMON_SPECIES_PATH = "pokemon-species/%s";
 
     private final RestTemplate restTemplate;
@@ -38,8 +37,10 @@ public class PokeProvider {
                     .findFirst()
                     .orElseThrow(() -> new PokemonNotFoundException(String.format("We could not find any pokemon with the name %s", pokemonName)))
                     .getText();
-        } catch (HttpClientErrorException | HttpServerErrorException e) {
+        } catch (HttpClientErrorException e) {
             throw new PokemonNotFoundException(String.format("We could not find any pokemon with the name %s", pokemonName));
+        } catch (HttpServerErrorException e) {
+            throw new PokeProviderException("The PokeAPI is currently unavailable");
         }
     }
 }
