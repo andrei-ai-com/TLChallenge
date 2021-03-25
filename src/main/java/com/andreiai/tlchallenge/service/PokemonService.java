@@ -1,5 +1,6 @@
 package com.andreiai.tlchallenge.service;
 
+import com.andreiai.tlchallenge.domain.PokemonResponse;
 import com.andreiai.tlchallenge.provider.PokeProvider;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +13,14 @@ public class PokemonService {
         this.pokeProvider = pokeProvider;
     }
 
-    public String getPokemonName(String pokemonName) {
+    public PokemonResponse getPokemonName(String pokemonName) {
 
-        return pokeProvider.getPokemonDescription(pokemonName);
+        String description = curateDescription(pokeProvider.getPokemonDescription(pokemonName));
+
+        return new PokemonResponse(pokemonName, description);
+    }
+
+    private String curateDescription(String pokemonDescription) {
+        return pokemonDescription.replaceAll("\n", " ");
     }
 }

@@ -1,5 +1,6 @@
 package com.andreiai.tlchallenge.controller;
 
+import com.andreiai.tlchallenge.domain.PokemonResponse;
 import com.andreiai.tlchallenge.domain.exception.PokemonNotFoundException;
 import com.andreiai.tlchallenge.service.PokemonService;
 import io.swagger.annotations.ApiResponse;
@@ -22,13 +23,13 @@ public class PokemonController {
         this.pokemonService = pokemonService;
     }
 
-    @GetMapping(value = "{pokemonName}", produces = MediaType.TEXT_PLAIN_VALUE)
+    @GetMapping(value = "{pokemonName}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = String.class),
+            @ApiResponse(code = 200, message = "OK", response = PokemonResponse.class),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
-    public ResponseEntity<String> getHealthcheck(@PathVariable String pokemonName) {
+    public ResponseEntity getHealthcheck(@PathVariable String pokemonName) {
         try {
             return new ResponseEntity<>(pokemonService.getPokemonName(pokemonName), HttpStatus.OK);
         } catch (PokemonNotFoundException e) {
