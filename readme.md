@@ -60,4 +60,9 @@ Assuming a fresh AWS instance with Ubuntu
     $ sudo docker build -t tlchallenge:1.0 . 
     $ sudo docker run -d -p 8080:8080 -t tlchallenge:1.0 
     ```
-7. The app should be available on your localhost, port 8080 --> http://127.0.0.1:8080/healthcheck
+7. The app should be available on your localhost, port 8080 --> http://127.0.0.1:8080/healthcheck or [click here - local charizard](http://127.0.0.1:8080/pokemon/charizard)
+
+Alternatively, we can skip docker and run the app right after step 5 by running
+```
+$ java -jar target/tlchallenge-1.0.jar
+```
