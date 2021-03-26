@@ -135,9 +135,8 @@ The ShakespeareAPI is currently unavailable.
 To get around this an in-memory cache is used. The cached objects are returned on 429-s responses.
 
 ## Steps for improvement
+* Split environments into `dev`, `staging`, and `prod`
 * Increase test coverage
-    * test the `Controller Layer` by mocking the `Service Layer`
-    * test the `Controller Layer` by starting up a local server and throwing predicted requests at it (end to end test)
 * Instead of using just an in-memory cache we could spin up a DB somewhere (I would suggest something like MongoDB due to its simplicity and quick READs)
 * To get around the rate limits on the `Shakespeare API` we can have a worker going through the Pokemon list at a rate of 4-5 an hour and populate the above DB. In a couple of days we should have a complete collection (unless we expand internationally and require multiple languages, case in which 1 year should be enough-ish).
 * Add support for HTTPS
