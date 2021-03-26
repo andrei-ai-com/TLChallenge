@@ -66,3 +66,70 @@ Alternatively, we can skip docker and run the app right after step 5 by running
 ```
 $ java -jar target/tlchallenge-1.0.jar
 ```
+
+## TLChallenge structure
+
+Spring Boot App structured on functional layers:
+* `Controller Layer` (facade, user entry point)
+* `Service Layer` (main business logic, albeit simple in this case)
+    * curating input data
+    * aggregating dependencies (pokemon description & shakespeare speech)
+    * caching {pokemon name - shakespeare speech}
+* `Provider Layer` (third party gateways for communication)
+
+## Testing methodology
+
+* Testing the `Service Layer`:
+   * mocking the PokeAPI
+   * mocking the ShakespeareAPI
+   * checking for both nominal run and dependency failure
+* Testing the `Provider Layer` (PokeAPI, ShakespeareAPI) 
+   * intercepting and stubbing the requests
+   * checking for OK responses and client & server errors
+ 
+## Expected API Calls
+
+`200`: 
+```
+{
+    "name": "charizard",
+    "description": "Spits fire yond is hot enow to melt boulders. Known to cause forest fires unintentionally."
+}
+```
+```
+{
+   "name": "bulbasaur",
+   "description": "A strange seed wast planted on its back at birth. The plant sprouts and grows with this pokémon."
+}
+```
+`404`:
+```
+Pokemon bulbasaurasd not found, please try a valid name. Examples: [pikachu, raichu, mewtwo, charizard, bulbasaur]
+```
+
+`Spring default 404 error page`: 
+```
+Whitelabel Error Page
+This application has no explicit mapping for /error, so you are seeing this as a fallback.
+
+Fri Mar 26 01:07:58 GMT 2021
+There was an unexpected error (type=Not Found, status=404).
+No message available
+```
+`429`:
+```
+429 Too Many Requests --> Here is a list of cached Shakespeare pokemons {raichu=Its tail discharges electricity into the did grind,  protecting 't from getting did shock., bulbasaur=A strange seed wast planted on its back at birth. The plant sprouts and grows with this pokémon., pikachu=At which hour several of these pokémon gather,  their electricity couldst buildeth and cause lightning storms., mewtwo='t wast did create by a scientist after years of horrific gene splicing and dna engineering experiments., charizard=Spits fire yond is hot enow to melt boulders. Known to cause forest fires unintentionally., cobalion=This legendary pokémon battled 'gainst humans to protect pokémon. Its personality is halcyon and composed.}
+```
+`503` (Depending on failed third party dependency):
+```
+The PokeAPI is currently unavailable.
+```
+```
+The ShakespeareAPI is currently unavailable.
+```
+ 
+## Rate Limits
+
+`Shakespeare API`: 5 requests an hour, 60 a day
+
+To get around this a in-memory cache is used. The cached objects are returned on 429-s responses.
