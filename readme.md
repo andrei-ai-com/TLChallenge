@@ -1,7 +1,7 @@
 # TrueLayer Pokemon Challenge
 > Spits fire yond is hot enow to melt boulders. - Charizard
 
-Quick Demo:
+Quick Demo hosted on AWS:
 * [Charizard](http://18.134.253.238:8080/pokemon/charizard)
 * [Pikachu](http://18.134.253.238:8080/pokemon/pikachu)
 * [Raichu](http://18.134.253.238:8080/pokemon/raichu)
