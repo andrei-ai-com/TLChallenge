@@ -35,6 +35,7 @@ public class PokemonController {
             @ApiResponse(code = 200, message = "OK", response = PokemonResponse.class),
             @ApiResponse(code = 400, message = "Bad Request"),
             @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 429, message = "Too Many Requests"),
             @ApiResponse(code = 500, message = "Internal Server Error"),
             @ApiResponse(code = 503, message = "Service Unavailable")
     })
