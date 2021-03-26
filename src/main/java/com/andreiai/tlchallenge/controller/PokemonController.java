@@ -37,7 +37,7 @@ public class PokemonController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
             @ApiResponse(code = 503, message = "Service Unavailable")
     })
-    public ResponseEntity getHealthcheck(@PathVariable String pokemonName) {
+    public ResponseEntity getShakespearePokemon(@PathVariable String pokemonName) {
 
         if (pokemonName == null || pokemonName.isBlank()) {
             return new ResponseEntity<>("Please provide us with a Pokemon name", HttpStatus.BAD_REQUEST);
