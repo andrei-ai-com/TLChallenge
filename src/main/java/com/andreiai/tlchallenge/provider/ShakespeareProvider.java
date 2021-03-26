@@ -3,6 +3,7 @@ package com.andreiai.tlchallenge.provider;
 import com.andreiai.tlchallenge.domain.ShakespeareResponse;
 import com.andreiai.tlchallenge.domain.exception.ShakespeareBadRequestException;
 import com.andreiai.tlchallenge.domain.exception.ShakespeareProviderException;
+import com.andreiai.tlchallenge.domain.exception.ShakespeareTooManyRequestsException;
 import com.andreiai.tlchallenge.service.PokemonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +56,7 @@ public class ShakespeareProvider {
                     entity,
                     ShakespeareResponse.class).getBody()).getContents().getTranslated();
         } catch (HttpClientErrorException.TooManyRequests e) {
-            throw new ShakespeareBadRequestException(String.format("%s --> Here is a list of cached Shakespeare pokemons %s", e.getMessage(), PokemonService.cachedShakespeare), e);
+            throw new ShakespeareTooManyRequestsException(String.format("%s --> Here is a list of cached Shakespeare pokemons %s", e.getMessage(), PokemonService.cachedShakespeare), e);
         } catch (HttpClientErrorException e) {
             throw new ShakespeareBadRequestException(e.getMessage(), e);
         } catch (HttpServerErrorException e) {

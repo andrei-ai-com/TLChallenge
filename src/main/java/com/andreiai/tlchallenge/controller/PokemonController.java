@@ -4,6 +4,7 @@ import com.andreiai.tlchallenge.domain.PokemonResponse;
 import com.andreiai.tlchallenge.domain.exception.BadRequestException;
 import com.andreiai.tlchallenge.domain.exception.PokemonNotFoundException;
 import com.andreiai.tlchallenge.domain.exception.ServiceUnavailableException;
+import com.andreiai.tlchallenge.domain.exception.TooManyRequestsException;
 import com.andreiai.tlchallenge.service.PokemonService;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -51,6 +52,9 @@ public class PokemonController {
         } catch (PokemonNotFoundException e) {
             logger.info("Pokemon not found", e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (TooManyRequestsException e) {
+            logger.info("Too many requests exception", e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.TOO_MANY_REQUESTS);
         } catch (ServiceUnavailableException e) {
             logger.warn("One of the third parties is unavailable", e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
