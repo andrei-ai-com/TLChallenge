@@ -132,4 +132,4 @@ The ShakespeareAPI is currently unavailable.
 
 `Shakespeare API`: 5 requests an hour, 60 a day
 
-To get around this a in-memory cache is used. The cached objects are returned on 429-s responses.
+To get around this an in-memory cache is used. The cached objects are returned on 429-s responses.
