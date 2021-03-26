@@ -98,7 +98,7 @@ class PokeProviderTest {
             pokeProvider.getPokemonDescription(pokemonName);
             fail();
         } catch (PokemonNotFoundException e) {
-            assertEquals(String.format("We could not find any pokemon with the name %s", pokemonName.toLowerCase()), e.getMessage());
+            assertEquals(String.format("Pokemon %s not found, please try a valid name. Examples: [pikachu, raichu, mewtwo, charizard, bulbasaur]", pokemonName.toLowerCase()), e.getMessage());
         }
 
         mockServer.verify();
