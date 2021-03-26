@@ -145,3 +145,6 @@ To get around this an in-memory cache is used. The cached objects are returned o
 * Add monitoring for uptime
 * Add customised default page for 4xx and 5xx errors 
 * Add UI & text-2-speech functionality (this one would be super fun)
+
+## Git History
+[TLChallenge - history](https://github.com/andrei-ai-com/TLChallenge/commits/master)
